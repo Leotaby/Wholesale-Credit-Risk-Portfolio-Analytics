@@ -170,7 +170,7 @@ MIT. No proprietary data, code or methodology is included or implied.
 
 ## Author
 
-Hatef Taby
+Hatef Tabbakhian (Leo)
 
 [GitHub](https://github.com/Leotaby) · [LinkedIn](https://www.linkedin.com/in/hateftaby/) ·
 [tabbakhianhatef@gmail.com](mailto:tabbakhianhatef@gmail.com)
