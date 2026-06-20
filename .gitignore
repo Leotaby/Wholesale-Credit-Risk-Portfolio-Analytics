@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.venv/
+env/
+venv/
+.eggs/
+*.egg-info/
+dist/
+build/
+
+# Data (raw data not committed — too large / potentially proprietary)
+data/raw/
+data/processed/
+data/credit_risk.db
+
+# Generated tabular outputs are reproducible and omitted from git by default.
+# Curated figures, the executive summary and run manifest are intentionally
+# versioned so a reviewer can assess the project without running it.
+reports/*.csv
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+notebooks/reports/
+
+# Coverage
+.coverage
+coverage.xml
+htmlcov/
+.pytest_cache/
+.ruff_cache/
+
+# Misc
+.DS_Store
+*.log
+*.env
+.env

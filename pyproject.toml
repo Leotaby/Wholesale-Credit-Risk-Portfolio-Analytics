@@ -1,0 +1,38 @@
+[project]
+name = "wholesale-credit-risk-portfolio-analytics"
+version = "3.0.0"
+description = "Reproducible wholesale credit risk portfolio surveillance and model validation"
+readme = "README.md"
+requires-python = ">=3.10,<3.12"
+license = { text = "MIT" }
+authors = [
+  { name = "Hatef Taby", email = "tabbakhianhatef@gmail.com" },
+]
+
+[project.urls]
+Repository = "https://github.com/Leotaby/Wholesale-Credit-Risk-Portfolio-Analytics"
+LinkedIn = "https://www.linkedin.com/in/hateftaby/"
+
+[tool.pytest.ini_options]
+addopts = "-ra --strict-markers"
+testpaths = ["tests"]
+
+[tool.coverage.run]
+branch = true
+source = ["src"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+
+[tool.ruff]
+target-version = "py310"
+line-length = 110
+exclude = ["notebooks"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM"]
+ignore = ["E501"]
+
+[tool.ruff.format]
+quote-style = "double"

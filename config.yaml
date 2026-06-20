@@ -1,0 +1,120 @@
+# ─────────────────────────────────────────────────────────────
+#  Wholesale Credit Risk Portfolio Analytics – Configuration
+# ─────────────────────────────────────────────────────────────
+# Edit paths and parameters here before running main.py.
+
+project:
+  name: "Wholesale Credit Risk Portfolio Analytics"
+  version: "3.0.0"
+  seed: 42          # global random seed for reproducibility
+  log_level: "INFO" # DEBUG | INFO | WARNING | ERROR
+
+# ── Data ─────────────────────────────────────────────────────
+data:
+  raw_dir: "data/raw"
+  processed_dir: "data/processed"
+  # Synthetic portfolio size (used when real Kaggle data not present)
+  synthetic_n_obligors: 2500
+  synthetic_start_date: "2018-01-01"
+  synthetic_end_date:   "2023-12-31"
+  # FRED API (https://fred.stlouisfed.org/docs/api/api_key.html)
+  # Set to null to use pre-baked CSV fallback instead
+  # Prefer the FRED_API_KEY environment variable. Never commit a live key.
+  fred_api_key: null
+# ── Database (portable demo uses SQLite) ─────────────────────
+database:
+  engine: "sqlite"
+  sqlite_path: "data/credit_risk.db"
+  # A governed deployment should provide an explicit warehouse adapter.
+
+# ── Rating Migration ─────────────────────────────────────────
+rating_migration:
+  rating_scale:
+    - AAA
+    - AA
+    - A
+    - BBB
+    - BB
+    - B
+    - CCC
+    - D        # default absorbing state
+  lookback_years: 5
+  bootstrap_iterations: 300    # obligor-cluster bootstrap confidence intervals
+
+# ── Credit Risk Parameters ───────────────────────────────────
+credit_risk:
+  lgd_by_seniority:
+    senior_secured: 0.25
+    senior_unsecured: 0.45
+    subordinated: 0.70
+  # Basel-style maturity adjustment (years)
+  default_maturity: 2.5
+  risk_appetite:
+    max_sector_share_pct: 20.0
+    max_single_name_share_pct: 3.0
+    max_watchlist_share_pct: 15.0
+    severe_el_uplift_limit_ppts: 2.5
+
+# ── Stress Testing Scenarios ─────────────────────────────────
+stress_testing:
+  scenarios:
+    baseline:
+      gdp_shock_pct: 0.0
+      unemployment_shock_ppts: 0.0
+      rate_shock_bps: 0
+      description: "Baseline – no macro shock"
+    mild_recession:
+      gdp_shock_pct: -2.0
+      unemployment_shock_ppts: 1.5
+      rate_shock_bps: -50
+      description: "Mild recession – moderate GDP contraction"
+    severe_recession:
+      gdp_shock_pct: -5.0
+      unemployment_shock_ppts: 4.0
+      rate_shock_bps: -150
+      description: "Severe recession – deep downturn (GFC-like)"
+    stagflation:
+      gdp_shock_pct: -1.5
+      unemployment_shock_ppts: 2.0
+      rate_shock_bps: 250
+      description: "Stagflation – low growth + high rates"
+
+# ── Macro-PD Model ───────────────────────────────────────────
+macro_model:
+  target: "default_next_quarter"
+  features:
+    - gdp_growth_yoy
+    - unemployment_rate
+    - fed_funds_rate
+    - yield_10y
+    - cpi_yoy
+    - leverage_ratio
+    - interest_coverage
+    - current_ratio
+  test_size: 0.25
+  cv_folds: 5
+  models:
+    - logistic_regression
+    - random_forest
+    - hist_gradient_boosting
+    # Add xgboost after installing requirements-xgboost.txt.
+
+# ── Unstructured text ─────────────────────────────────────────
+llm:
+  # "heuristic" is deterministic/offline; set "bart_zero_shot" explicitly
+  # after installing torch and downloading the model.
+  mode: "heuristic"
+  model_name: "facebook/bart-large-mnli"
+  score_threshold: 0.25
+
+# ── Visualisation ────────────────────────────────────────────
+viz:
+  style: "seaborn-v0_8-whitegrid"
+  palette: "Blues_d"
+  dpi: 150
+  output_dir: "reports/figures"
+  figsize_default: [10, 6]
+
+# ── Reports ──────────────────────────────────────────────────
+reports:
+  output_dir: "reports"

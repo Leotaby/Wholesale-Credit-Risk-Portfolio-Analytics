@@ -1,0 +1,3 @@
+-r requirements.txt
+# macOS: install OpenMP first (`brew install libomp`).
+xgboost>=2.0.0,<3.0.0
